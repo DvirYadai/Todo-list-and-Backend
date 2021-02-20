@@ -1,0 +1,54 @@
+  
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My TODO List</title>
+    <script src="https://kit.fontawesome.com/16662469fc.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&family=Yusei+Magic&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <script src="utils.js"></script>
+  </head>
+  <body>
+    <div id="main">
+      <section id="control-section">
+        <h1 class="main-header">To Do List</h1>
+        <input type="text" id="text-input" placeholder="Write your task...">
+        <select name="priority-selector" id="priority-selector">
+          <option value="" disabled selected>Select Priority</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <button id="add-button">+</button><br>
+        <p id="tasks-number">Number of tasks: <span id="counter"></span></p> 
+        <div id="search-div">
+          <input id="search-button" type="text" placeholder="Search...">
+        </div> 
+        <button id="sort-button">Sort</button>
+        <i id="undo-button" class="fas fa-undo"></i>
+      </section>
+      <div id="loading"></div>
+      <section id="view-section">
+        <form id="form" method="post">
+            <input type="text" id="username" name="username" placeholder="Enter your username">
+            <input type="submit" id="login-button" value="Login">
+            <p id="qP">Don't have an account?</p>
+        </form>
+        <ul id="to-do-list">
+
+        </ul>
+      </section>
+    </div>
+    <div id="links">
+      <a href="https://www.facebook.com/dvir.yadai.3" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://twitter.com/YadaiDvir" target="_blank"><i class="fab fa-twitter"></i></a>
+      <a href="https://github.com/DvirYadai" target="_blank"><i class="fab fa-github"></i></a>
+    </div>
+  <script src="./main.js"></script>
+  </body>
+</html>

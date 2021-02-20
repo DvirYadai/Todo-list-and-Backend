@@ -1,0 +1,16 @@
+{
+    "my-todo": [
+        {
+            "priority": "3",
+            "date": "2021-02-20 20:00:12",
+            "text": "asd",
+            "isDone": false
+        },
+        {
+            "priority": "5",
+            "date": "2021-02-20 20:02:06",
+            "text": "as",
+            "isDone": false
+        }
+    ]
+}
