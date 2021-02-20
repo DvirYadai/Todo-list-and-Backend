@@ -5,9 +5,9 @@ const fs = require("fs");
 const bodyParser = require("body-parser");
 const timeOutMiddleware = require("./middleware/timeOut.js");
 
-app.use(bodyParser.json());
 app.use(timeOutMiddleware);
 app.use(express.json());
+app.use(bodyParser.json());
 
 app.get("/:username", (req, res) => {
   const { username } = req.params;

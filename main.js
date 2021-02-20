@@ -14,7 +14,6 @@ window.addEventListener("DOMContentLoaded", () => {
 document.getElementById("login-button").addEventListener("click", (e) => {
   e.preventDefault();
   const username = document.getElementById("username");
-  localStorage.setItem("username", username.value);
   getFromServer(username.value);
   username.value = "";
 });
@@ -25,14 +24,16 @@ document.getElementById("qP").addEventListener("click", () => {
   signInButton.setAttribute("type", "submit");
   signInButton.setAttribute("id", "sign-in-button");
   signInButton.setAttribute("value", "Sign In");
+  const usernameInput = document.getElementById("username");
+  usernameInput.setAttribute("placeholder", "Enter new username");
   const form = document.getElementById("form");
   document.getElementById("qP").remove();
   form.appendChild(signInButton);
 
   signInButton.addEventListener("click", (e) => {
     e.preventDefault();
-    const username = document.getElementById("username");
-    createUser(username);
+    let username = document.getElementById("username");
+    createUser(username.value);
     username.value = "";
   });
 });
@@ -75,6 +76,7 @@ function getFromServer(username) {
       res
         .json()
         .then((data) => {
+          localStorage.setItem("username", username);
           const form = document.getElementById("form");
           form.remove();
           savedToDoList = data["my-todo"];
@@ -118,23 +120,23 @@ function updateServer(arr) {
 }
 
 function createUser(username) {
-  fetch(`http://localhost:3000/${username.value}`, {
+  displayLoading();
+  fetch(`http://localhost:3000/${username}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-  }).then((res) =>
-    res
-      .json()
-      .then(() => {
-        localStorage.removeItem("changeDataArr");
-        localStorage.setItem("username", username.value);
-        const form = document.getElementById("form");
-        form.remove();
-      })
-      .catch(() => {
-        const usernameInput = document.getElementById("username");
-        usernameInput.setAttribute("placeholder", `${res.statusText}`);
-      })
-  );
+  }).then((res) => {
+    if (res.ok) {
+      localStorage.removeItem("changeDataArr");
+      localStorage.setItem("username", username);
+      const form = document.getElementById("form");
+      form.remove();
+      hideLoading();
+    } else {
+      const usernameInput = document.getElementById("username");
+      usernameInput.setAttribute("placeholder", `${res.statusText}`);
+      hideLoading();
+    }
+  });
 }
 
 // Function that create to do task item and appending it to the html.
