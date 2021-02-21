@@ -18,7 +18,7 @@ document.getElementById("login-button").addEventListener("click", (e) => {
   username.value = "";
 });
 
-document.getElementById("qP").addEventListener("click", () => {
+function qPEvent() {
   document.getElementById("login-button").remove();
   const signInButton = document.createElement("input");
   signInButton.setAttribute("type", "submit");
@@ -32,11 +32,18 @@ document.getElementById("qP").addEventListener("click", () => {
 
   signInButton.addEventListener("click", (e) => {
     e.preventDefault();
+    const toDoListUL = document.getElementById("to-do-list");
+    const signOutButton = document.createElement("button");
+    signOutButton.setAttribute("id", "sign-out-button");
+    signOutButton.innerText = "Sign Out";
+    toDoListUL.appendChild(signOutButton);
+    signOutButton.addEventListener("click", signOutEvent);
     let username = document.getElementById("username");
     createUser(username.value);
     username.value = "";
   });
-});
+}
+document.getElementById("qP").addEventListener("click", qPEvent);
 
 // main events
 document.getElementById("add-button").addEventListener("click", addingToDoTask);
@@ -76,6 +83,8 @@ function getFromServer(username) {
       res
         .json()
         .then((data) => {
+          const controlSection = document.getElementById("control-section");
+          controlSection.hidden = false;
           localStorage.setItem("username", username);
           const form = document.getElementById("form");
           form.remove();
@@ -126,6 +135,8 @@ function createUser(username) {
     headers: { "Content-Type": "application/json" },
   }).then((res) => {
     if (res.ok) {
+      const controlSection = document.getElementById("control-section");
+      controlSection.hidden = false;
       localStorage.removeItem("changeDataArr");
       localStorage.setItem("username", username);
       const form = document.getElementById("form");
@@ -259,6 +270,8 @@ function LiCreationAndAppendingToHTML(inputValue, inputPriority, timeCreation) {
 }
 
 function signOutEvent() {
+  const controlSection = document.getElementById("control-section");
+  controlSection.hidden = true;
   localStorage.removeItem("changeDataArr");
   localStorage.removeItem("username");
   const toDoListUL = document.getElementById("to-do-list");
@@ -279,6 +292,7 @@ function signOutEvent() {
   const qP = document.createElement("p");
   qP.setAttribute("id", "qP");
   qP.innerHTML = "Don't have an account?";
+  qP.addEventListener("click", qPEvent);
   form.appendChild(qP);
   viewSection.appendChild(form);
 }
