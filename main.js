@@ -166,7 +166,7 @@ function addingToDoTask() {
   inputValue.value = "";
 }
 
-// Function that create to do task object and store it in the localStorage and in the JSONBIN.io.
+// Function that create to do task object and store it in the server.
 function toDoTaskObjectCreationAndStorage(text, priority, time) {
   // Creation of task object
   const taskObject = {
@@ -175,12 +175,6 @@ function toDoTaskObjectCreationAndStorage(text, priority, time) {
     text: text.value,
     isDone: false,
   };
-
-  // Store the object in the localStorage
-  let toDoListLocalStorage = JSON.parse(localStorage.getItem("my-todo"));
-  if (toDoListLocalStorage === null) toDoListLocalStorage = [];
-  toDoListLocalStorage.push(taskObject);
-  localStorage.setItem("my-todo", JSON.stringify(toDoListLocalStorage));
 
   // Store the object in the JSONBIN.io
   savedToDoList.push(taskObject);
@@ -315,9 +309,6 @@ function deleteButtonCreation(divParent) {
     // Updating the number of tasks in the html.
     spanCounter.innerText = savedToDoList.length;
 
-    // Updating the localStorage
-    localStorage.setItem("my-todo", JSON.stringify(savedToDoList));
-
     // Updating the JSONBIN.io
     updateServer(savedToDoList);
   });
@@ -382,7 +373,6 @@ function editButtonCreation(divParent) {
       // Update the innerText of the div in the localStorage and JSONBIN.io
       savedToDoList[index].text = textDiv.innerText;
       savedToDoList[index].priority = priorityDiv.innerText;
-      localStorage.setItem("my-todo", JSON.stringify(savedToDoList));
       updateServer(savedToDoList);
     });
   });
@@ -472,7 +462,6 @@ function undo() {
     priorityDiv.innerText = changeDataArr[changeDataArr.length - 1].priority;
   }
   // Updating the localStorage and JSONBIN.io with the undo changes and deleting the last change from the changeDataArr.
-  localStorage.setItem("my-todo", JSON.stringify(savedToDoList));
   updateServer(savedToDoList);
   changeDataArr.splice(changeDataArr.length - 1, 1);
   localStorage.setItem("changeDataArr", JSON.stringify(changeDataArr));
