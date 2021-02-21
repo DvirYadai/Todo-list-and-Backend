@@ -3,8 +3,10 @@ const app = express();
 const port = 3000;
 const fs = require("fs");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const timeOutMiddleware = require("./middleware/timeOut.js");
 
+app.use(cors());
 app.use(timeOutMiddleware);
 app.use(express.json());
 app.use(bodyParser.json());
