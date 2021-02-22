@@ -1,13 +1,15 @@
 let savedToDoList = [];
 let spanCounter = document.getElementById("counter");
 
+document.getElementById("sign-in-button").hidden = true;
+
 window.addEventListener("DOMContentLoaded", () => {
   displayLoading();
   localStorage.removeItem("changeDataArr");
   if (localStorage.getItem("username")) {
     const username = localStorage.getItem("username");
     getFromServer(username);
-  }
+  } else document.getElementById("sign-out-button").hidden = true;
   setTimeout(() => hideLoading(), 500);
 });
 
@@ -18,33 +20,25 @@ document.getElementById("login-button").addEventListener("click", (e) => {
   username.value = "";
 });
 
+document.getElementById("sign-in-button").addEventListener("click", (e) => {
+  e.preventDefault();
+  let username = document.getElementById("username");
+  createUser(username.value);
+  username.value = "";
+});
+
 function qPEvent() {
-  document.getElementById("login-button").remove();
-  const signInButton = document.createElement("input");
-  signInButton.setAttribute("type", "submit");
-  signInButton.setAttribute("id", "sign-in-button");
-  signInButton.setAttribute("value", "Sign In");
+  document.getElementById("qP").hidden = true;
   const usernameInput = document.getElementById("username");
   usernameInput.setAttribute("placeholder", "Enter new username");
-  const form = document.getElementById("form");
-  document.getElementById("qP").remove();
-  form.appendChild(signInButton);
-
-  signInButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    const toDoListUL = document.getElementById("to-do-list");
-    const signOutButton = document.createElement("button");
-    signOutButton.setAttribute("id", "sign-out-button");
-    signOutButton.innerText = "Sign Out";
-    toDoListUL.appendChild(signOutButton);
-    signOutButton.addEventListener("click", signOutEvent);
-    let username = document.getElementById("username");
-    createUser(username.value);
-    username.value = "";
-  });
+  document.getElementById("sign-in-button").hidden = false;
+  document.getElementById("login-button").hidden = true;
 }
-document.getElementById("qP").addEventListener("click", qPEvent);
 
+document.getElementById("qP").addEventListener("click", qPEvent);
+document
+  .getElementById("sign-out-button")
+  .addEventListener("click", signOutEvent);
 // main events
 document.getElementById("add-button").addEventListener("click", addingToDoTask);
 document
@@ -87,9 +81,10 @@ function getFromServer(username) {
           controlSection.hidden = false;
           localStorage.setItem("username", username);
           const form = document.getElementById("form");
-          form.remove();
+          form.hidden = true;
           savedToDoList = data["my-todo"];
           addingTasksWhenLogin(savedToDoList);
+          document.getElementById("sign-out-button").hidden = false;
           hideLoading();
         })
         .catch(() => {
@@ -140,7 +135,9 @@ function createUser(username) {
       localStorage.removeItem("changeDataArr");
       localStorage.setItem("username", username);
       const form = document.getElementById("form");
-      form.remove();
+      form.hidden = true;
+      document.getElementById("sign-out-button").hidden = false;
+      spanCounter.innerText = "0";
       hideLoading();
     } else {
       const usernameInput = document.getElementById("username");
@@ -197,12 +194,6 @@ function toDoTaskObjectCreationAndStorage(text, priority, time) {
 
 function addingTasksWhenLogin(arr) {
   const toDoListUL = document.getElementById("to-do-list");
-  const signOutButton = document.createElement("button");
-  signOutButton.setAttribute("id", "sign-out-button");
-  signOutButton.innerText = "Sign Out";
-  toDoListUL.appendChild(signOutButton);
-  signOutButton.addEventListener("click", signOutEvent);
-
   for (const item of arr) {
     const listItem = document.createElement("li");
     const containerDiv = document.createElement("div");
@@ -270,31 +261,21 @@ function LiCreationAndAppendingToHTML(inputValue, inputPriority, timeCreation) {
 }
 
 function signOutEvent() {
+  localStorage.removeItem("username");
   const controlSection = document.getElementById("control-section");
   controlSection.hidden = true;
-  localStorage.removeItem("changeDataArr");
-  localStorage.removeItem("username");
-  const toDoListUL = document.getElementById("to-do-list");
-  toDoListUL.innerHTML = "";
-  const viewSection = document.getElementById("view-section");
-  const form = document.createElement("form");
-  form.setAttribute("id", "form");
-  const usernameInput = document.createElement("input");
-  usernameInput.setAttribute("id", "username");
-  usernameInput.setAttribute("name", "username");
-  usernameInput.setAttribute("placeholder", "Enter your username");
-  form.appendChild(usernameInput);
-  const loginButton = document.createElement("input");
-  loginButton.setAttribute("type", "submit");
-  loginButton.setAttribute("id", "login-button");
-  loginButton.setAttribute("value", "Login");
-  form.appendChild(loginButton);
-  const qP = document.createElement("p");
-  qP.setAttribute("id", "qP");
-  qP.innerHTML = "Don't have an account?";
-  qP.addEventListener("click", qPEvent);
-  form.appendChild(qP);
-  viewSection.appendChild(form);
+  document.getElementById("form").hidden = false;
+  document.getElementById("sign-out-button").hidden = true;
+  const loginButton = document.getElementById("login-button");
+  document.getElementById("qP").hidden = false;
+  document.getElementById("to-do-list").innerHTML = "";
+  if (loginButton.hidden) {
+    loginButton.hidden = false;
+    document.getElementById("sign-in-button").hidden = true;
+    document
+      .getElementById("username")
+      .setAttribute("placeholder", "Enter your username");
+  }
 }
 
 // Function that create the delete button, adding click event and updating the localStorage and the JSONBIN.io
